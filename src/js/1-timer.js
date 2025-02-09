@@ -122,8 +122,8 @@ function messageAllert() {
     messageSize: '16px',
     messageLineHeight: '24px',
     messageColor: 'white',
-    iconUrl: '../img/bi_x-octagon.png',
+    iconUrl: '/img/bi_x-octagon.png',
     backgroundColor: '#EF4040',
-    close: '#fff',
+    theme: 'dark',
   });
 }
