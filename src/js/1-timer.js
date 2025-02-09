@@ -4,7 +4,7 @@ import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 import pathErrorIcon from '../img/octagon.svg';
 
-const timerInput = document.querySelector('#datetime-picker');
+const timerInput = document.getElementById('datetime-picker');
 const btnStart = document.querySelector('[data-start]');
 btnStart.disabled = true;
 timerInput.disabled = false;
@@ -27,7 +27,7 @@ const timerItem = {
     this.initTime = Date.now();
     this.counterTime = number;
     btnStart.disabled = true;
-    timerInput.disabled = true;
+    document.querySelector('.form-control').disabled = true;
     this.intervalId = setInterval(() => {
       this.timer();
     }, 1000);
@@ -35,13 +35,14 @@ const timerItem = {
 
   stop() {
     clearInterval(this.intervalId);
-    btnStart.disabled = true;
-    timerInput.disabled = false;
+    // btnStart.disabled = true;
+    document.querySelector('.form-control').disabled = false;
   },
 
   timer() {
     this.counterTime -= 1000;
-    if (this.counterTime <= 0) {
+    if (this.counterTime < 4) {
+      this.counterTime = 0;
       this.stop();
     }
     const convertTime = convertMs(this.counterTime);
@@ -73,7 +74,7 @@ const options = {
   },
 };
 
-flatpickr('#datetime-picker', options);
+flatpickr(timerInput, options);
 
 function checkTime(userTime) {
   const nowTime = Date.now();
