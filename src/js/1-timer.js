@@ -2,6 +2,7 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
+import pathErrorIcon from '../img/bi_x-octagon.png';
 
 const timerInput = document.querySelector('#datetime-picker');
 const btnStart = document.querySelector('[data-start]');
@@ -122,7 +123,7 @@ function messageAllert() {
     messageSize: '16px',
     messageLineHeight: '24px',
     messageColor: 'white',
-    iconUrl: '/img/bi_x-octagon.png',
+    iconUrl: pathErrorIcon,
     backgroundColor: '#EF4040',
     theme: 'dark',
   });
