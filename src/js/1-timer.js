@@ -6,6 +6,8 @@ import pathErrorIcon from '../img/octagon.svg';
 
 const timerInput = document.querySelector('#datetime-picker');
 const btnStart = document.querySelector('[data-start]');
+btnStart.disabled = true;
+timerInput.disabled = false;
 let userSelectedDate;
 
 console.log(timerInput);
@@ -24,11 +26,11 @@ const timerItem = {
   start(number) {
     this.initTime = Date.now();
     this.counterTime = number;
+    btnStart.disabled = true;
+    timerInput.disabled = true;
     this.intervalId = setInterval(() => {
       this.timer();
     }, 1000);
-    btnStart.disabled = true;
-    timerInput.disabled = true;
   },
 
   stop() {
@@ -80,7 +82,11 @@ function checkTime(userTime) {
   // console.log(deffTime);
   if (deffTime > 0) {
     btnStart.disabled = false;
-    btnStart.addEventListener('click', () => timerItem.start(deffTime));
+    btnStart.addEventListener('click', () => {
+      timerItem.start(deffTime);
+      btnStart.disabled = true;
+      timerInput.disabled = true;
+    });
   } else {
     btnStart.disabled = true;
     messageAllert();
