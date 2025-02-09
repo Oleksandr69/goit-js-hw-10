@@ -2,7 +2,7 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
-import pathErrorIcon from '../img/bi_x-octagon.svg';
+import pathErrorIcon from '../img/octagon.svg';
 
 const timerInput = document.querySelector('#datetime-picker');
 const btnStart = document.querySelector('[data-start]');
