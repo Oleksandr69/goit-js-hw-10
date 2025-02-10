@@ -35,6 +35,7 @@ formSnackbar.addEventListener('submit', evt => {
     }
     messageAllert(status, titleSnack, messageSnack, backgroundSnack);
   });
+  formSnackbar.reset();
 });
 
 function createPromise(value, delay) {
