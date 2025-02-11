@@ -6,12 +6,12 @@ import pathErrorIcon from '../img/octagon.svg';
 
 const timerInput = document.getElementById('datetime-picker');
 const btnStart = document.querySelector('[data-start]');
-btnStart.disabled = true;
-timerInput.disabled = false;
-let userSelectedDate;
+let userSelectedInterval = null;
 
-console.log(timerInput);
-console.log(btnStart);
+btnStart.disabled = true;
+
+// console.log(timerInput);
+// console.log(btnStart);
 
 const timerItem = {
   days: document.querySelector('[data-days'),
@@ -20,12 +20,10 @@ const timerItem = {
   seconds: document.querySelector('[data-seconds'),
 
   intervalId: null,
-  initTime: null,
   counterTime: null,
 
-  start(number) {
-    this.initTime = Date.now();
-    this.counterTime = number;
+  start() {
+    this.counterTime = userSelectedInterval;
     btnStart.disabled = true;
     document.querySelector('.form-control').disabled = true;
     this.intervalId = setInterval(() => {
@@ -35,23 +33,23 @@ const timerItem = {
 
   stop() {
     clearInterval(this.intervalId);
-    // btnStart.disabled = true;
+    btnStart.disabled = true;
     document.querySelector('.form-control').disabled = false;
   },
 
   timer() {
-    this.counterTime -= 1000;
-    if (this.counterTime < 4) {
-      this.counterTime = 0;
+    if (this.counterTime < 0) {
       this.stop();
+    } else {
+      const convertTime = convertMs(this.counterTime);
+      const ctrTime = timeToStr(convertTime);
+      this.days.textContent = ctrTime.days;
+      this.hours.textContent = ctrTime.hours;
+      this.minutes.textContent = ctrTime.minutes;
+      this.seconds.textContent = ctrTime.seconds;
+      this.counterTime -= 1000;
+      // console.log(ctrTime.seconds);
     }
-    const convertTime = convertMs(this.counterTime);
-    const ctrTime = timeToStr(convertTime);
-    this.days.textContent = ctrTime.days;
-    this.hours.textContent = ctrTime.hours;
-    this.minutes.textContent = ctrTime.minutes;
-    this.seconds.textContent = ctrTime.seconds;
-    // console.log(ctrTime.seconds);
   },
 };
 
@@ -68,26 +66,20 @@ const options = {
   positionElement: timerInput,
   weekNumbers: true,
   onClose(selectedDates) {
-    // console.log(selectedDates[0]);
-    userSelectedDate = selectedDates[0];
-    checkTime(userSelectedDate);
+    checkTime(selectedDates[0]);
   },
 };
 
 flatpickr(timerInput, options);
+timerBtnStart();
 
 function checkTime(userTime) {
   const nowTime = Date.now();
   const choseTime = Date.parse(userTime);
-  const deffTime = choseTime - nowTime;
-  // console.log(deffTime);
-  if (deffTime > 0) {
+  userSelectedInterval = choseTime - nowTime;
+
+  if (userSelectedInterval > 0) {
     btnStart.disabled = false;
-    btnStart.addEventListener('click', () => {
-      timerItem.start(deffTime);
-      btnStart.disabled = true;
-      timerInput.disabled = true;
-    });
   } else {
     btnStart.disabled = true;
     messageAllert();
@@ -95,19 +87,13 @@ function checkTime(userTime) {
 }
 
 function convertMs(ms) {
-  // Number of milliseconds per unit of time
   const second = 1000;
   const minute = second * 60;
   const hour = minute * 60;
   const day = hour * 24;
-
-  // Remaining days
   const days = Math.floor(ms / day);
-  // Remaining hours
   const hours = Math.floor((ms % day) / hour);
-  // Remaining minutes
   const minutes = Math.floor(((ms % day) % hour) / minute);
-  // Remaining seconds
   const seconds = Math.floor((((ms % day) % hour) % minute) / second);
 
   return { days, hours, minutes, seconds };
@@ -118,6 +104,7 @@ function timeToStr({ days, hours, minutes, seconds }) {
   hours = hours.toString().padStart(2, '0');
   minutes = minutes.toString().padStart(2, '0');
   seconds = seconds.toString().padStart(2, '0');
+
   return { days, hours, minutes, seconds };
 }
 
@@ -133,5 +120,11 @@ function messageAllert() {
     iconUrl: pathErrorIcon,
     backgroundColor: '#EF4040',
     theme: 'dark',
+  });
+}
+
+function timerBtnStart() {
+  btnStart.addEventListener('click', () => {
+    timerItem.start();
   });
 }
