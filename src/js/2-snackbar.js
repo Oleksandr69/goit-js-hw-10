@@ -20,35 +20,38 @@ formSnackbar.addEventListener('submit', evt => {
     statusSnackbar.push(event);
   }
 
-  const alertPromis = createPromise(statusSnackbar[1][1], statusSnackbar[0][1]);
-  alertPromis.then(data => {
-    if (data === 'fulfilled') {
-      status = true;
-      titleSnack = 'OK';
-      messageSnack = `Fulfilled promise in ${statusSnackbar[0][1]}ms`;
-      backgroundSnack = ' #59a10d';
-    } else if (data === 'rejected') {
-      status = false;
-      titleSnack = 'Error';
-      messageSnack = `Rejected promise in ${statusSnackbar[0][1]}ms`;
-      backgroundSnack = ' #ef4040';
-    }
-    messageAllert(status, titleSnack, messageSnack, backgroundSnack);
-  });
+  const valueSnack = statusSnackbar[1][1];
+  const delaySnack = +statusSnackbar[0][1];
+
+  const alertPromis = createPromise(valueSnack, delaySnack);
+  alertPromis
+    .then((status, delaySnack) => messageAllert(status, delaySnack))
+    .catch((status, delaySnack) => messageAllert(status, delaySnack));
   formSnackbar.reset();
 });
 
 function createPromise(value, delay) {
-  const promis = new Promise(resolve => {
+  const promis = new Promise((resolve, reject) => {
     setTimeout(() => {
-      resolve(value);
+      if (value === 'fulfilled') {
+        status = true;
+        resolve(status, delay);
+      } else if (value === 'rejected') {
+        status = false;
+        reject(status, delay);
+      }
     }, delay);
   });
   return promis;
 }
 
-function messageAllert(status, titleSnack, messageSnack, backgroundSnack) {
+function messageAllert(status, delay) {
   const iconUrl = status ? pathSuccessIcon : pathErrorIcon;
+  const titleSnack = status ? 'OK' : 'Error';
+  const messageSnack = status
+    ? `Fulfilled promise in ${delay}ms`
+    : `Rejected promise in ${delay}ms`;
+  const backgroundSnack = status ? ' #59a10d' : ' #ef4040';
   iziToast.show({
     position: 'topRight',
     title: titleSnack,
