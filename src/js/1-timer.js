@@ -41,13 +41,14 @@ const timerItem = {
     if (this.counterTime < 0) {
       this.stop();
     } else {
+      this.counterTime -= 1000;
       const convertTime = convertMs(this.counterTime);
       const ctrTime = timeToStr(convertTime);
       this.days.textContent = ctrTime.days;
       this.hours.textContent = ctrTime.hours;
       this.minutes.textContent = ctrTime.minutes;
       this.seconds.textContent = ctrTime.seconds;
-      this.counterTime -= 1000;
+
       // console.log(ctrTime.seconds);
     }
   },
